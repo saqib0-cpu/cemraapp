@@ -1,5 +1,5 @@
 // Configurations
-const API_URL = "http://127.0.0.1:8000/attendance";
+const API_URL = "/attendance";
 const MAX_IMAGE_SIZE_KB = 250;
 
 // Element Selectors
