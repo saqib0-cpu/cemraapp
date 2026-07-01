@@ -94,17 +94,17 @@ async def root():
 @app.get("/capture", response_class=HTMLResponse)
 async def serve_capture():
     """Serve the student capture page."""
-    return FileResponse("capture.html")
+    return FileResponse(os.path.join(os.path.dirname(__file__), "capture.html"))
 
 @app.get("/admin", response_class=HTMLResponse)
 async def serve_admin():
     """Serve the admin dashboard."""
-    return FileResponse("admin.html")
+    return FileResponse(os.path.join(os.path.dirname(__file__), "admin.html"))
 
 @app.get("/styles.css")
 async def serve_css():
-    return FileResponse("styles.css", media_type="text/css")
+    return FileResponse(os.path.join(os.path.dirname(__file__), "styles.css"), media_type="text/css")
 
 @app.get("/script.js")
 async def serve_js():
-    return FileResponse("script.js", media_type="application/javascript")
+    return FileResponse(os.path.join(os.path.dirname(__file__), "script.js"), media_type="application/javascript")
