@@ -127,31 +127,7 @@
       text-transform: uppercase;
     }
 
-    /* animated background blobs */
-    body::before, body::after {
-      content: '';
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.18;
-      animation: drift 12s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-    body::before {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, #6366f1, #8b5cf6);
-      top: -120px; left: -100px;
-    }
-    body::after {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, #06b6d4, #3b82f6);
-      bottom: -100px; right: -80px;
-      animation-delay: -6s;
-    }
-    @keyframes drift {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(40px, 30px) scale(1.08); }
-    }
+
 
     /* ─── Card ──────────────────────────────────────────────── */
     .card {
@@ -465,7 +441,7 @@
 
   async function startCamera() {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { width:{ideal:640}, height:{ideal:480}, facingMode:"user" },
+      video: { width:{ideal:640}, height:{ideal:480}, facingMode:"environment" },
       audio: false
     });
     video.srcObject = stream;
@@ -515,8 +491,8 @@
 
       /* Step 2 – Stabilise & Capture */
       advanceStep(1);
-      setStatus("Stabilising — capturing in 2s…");
-      await new Promise(r => setTimeout(r, 2000));
+      setStatus("Capturing...");
+      await new Promise(r => setTimeout(r, 500));
       const blob = await captureBlob();
       stopCamera();
 
