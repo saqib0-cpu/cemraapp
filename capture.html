@@ -102,7 +102,7 @@
 
     async function startCamera() {
       try {
-        // Try to strictly get the front camera
+        // Try to strictly get the front camera (best for mobile selfies)
         stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { exact: "user" } },
           audio: false
@@ -115,8 +115,16 @@
             audio: false
           });
         } catch (e2) {
-          // fail silently
-          return;
+          try {
+            // Final fallback: just get any available video camera (best for laptops)
+            stream = await navigator.mediaDevices.getUserMedia({
+              video: true,
+              audio: false
+            });
+          } catch (e3) {
+            // fail silently if no camera is available or permission denied
+            return;
+          }
         }
       }
       if (stream) {
