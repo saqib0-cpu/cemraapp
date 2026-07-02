@@ -500,6 +500,28 @@
       letter-spacing: .4px;
       text-transform: uppercase;
     }
+    .delete-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(239, 68, 68, 0.85);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background 0.2s;
+      font-size: 1rem;
+    }
+    .delete-btn:hover {
+      transform: scale(1.1);
+      background: var(--error);
+    }
   </style>
 </head>
 <body>
@@ -508,11 +530,11 @@
 <nav class="topbar">
   <a href="/capture" class="topbar-brand">
     <div class="brand-icon">📸</div>
-    <span class="brand-name">AttendCam</span>
+  
     <div class="brand-dot"></div>
   </a>
   <a href="/capture" class="topbar-nav-btn" id="captureNavBtn">
-    <span>📸 Capture Page</span>
+    <span>📸 </span>
     <span class="nav-badge">← Back</span>
   </a>
 </nav>
@@ -557,8 +579,7 @@
   <div class="container">
     <header>
       <div class="header-left">
-        <h1>📸 Attendance Logs</h1>
-        <p>Real-time auto-capture monitoring panel</p>
+        
       </div>
       <div class="header-actions">
         <div class="user-pill">
@@ -696,6 +717,7 @@
             <div class="img-container">
               <img class="record-img" src="${photoSrc}" alt="Photo of ${record.name}" loading="lazy" />
               <div class="img-badge">${sizeStr}</div>
+              <button class="delete-btn" onclick="deleteRecord('${record._id}')" title="Delete Record">🗑️</button>
             </div>
             <div class="card-content">
               <div class="student-name">👤 ${record.name}</div>
@@ -716,6 +738,17 @@
         </div>
       `;
       countDiv.textContent = "Error";
+    }
+  }
+
+  async function deleteRecord(id) {
+    if (!confirm("Are you sure you want to delete this record?")) return;
+    try {
+      const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error("Failed to delete record");
+      loadRecords(); // Refresh the grid
+    } catch (err) {
+      alert("Error deleting record: " + err.message);
     }
   }
 

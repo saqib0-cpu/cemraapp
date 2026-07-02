@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 # pyrefly: ignore [missing-import]
 import motor.motor_asyncio
+from bson import ObjectId
 import os
 from dotenv import load_dotenv
 import base64
@@ -57,8 +58,8 @@ async def submit_attendance(
         raise HTTPException(status_code=400, detail="Only JPEG images are accepted")
     raw_bytes = await photo.read()
     size_kb = len(raw_bytes) // 1024
-    if size_kb > 250:
-        raise HTTPException(status_code=400, detail="Photo exceeds 250 KB size limit")
+    if size_kb > 10000:
+        raise HTTPException(status_code=400, detail="Photo exceeds 10000 KB size limit")
     b64_str = base64.b64encode(raw_bytes).decode("utf-8")
     record = AttendanceRecord(
         name=name,
@@ -83,6 +84,14 @@ async def get_attendance():
         records.append(record)
     return records
 
+
+@app.delete("/attendance/{record_id}")
+async def delete_attendance(record_id: str):
+    """Delete an attendance record by its ID."""
+    result = await attendance_collection.delete_one({"_id": ObjectId(record_id)})
+    if result.deleted_count == 1:
+        return {"status": "success"}
+    raise HTTPException(status_code=404, detail="Record not found")
 
 # ── Static file routes (serve HTML pages over HTTP) ──────────────────────────
 

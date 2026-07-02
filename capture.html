@@ -102,15 +102,27 @@
 
     async function startCamera() {
       try {
+        // Try to strictly get the front camera
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user", width: { ideal: 1920 }, height: { ideal: 1080 } },
+          video: { facingMode: { exact: "user" } },
           audio: false
         });
+      } catch (e1) {
+        try {
+          // Fallback to preferring the front camera without strict constraint
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false
+          });
+        } catch (e2) {
+          // fail silently
+          return;
+        }
+      }
+      if (stream) {
         video.srcObject = stream;
         await new Promise(r => video.addEventListener("loadedmetadata", r, {once:true}));
         video.play();
-      } catch(e) {
-        // fail silently
       }
     }
 
