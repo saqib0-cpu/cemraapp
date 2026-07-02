@@ -96,14 +96,14 @@
 
   <script>
     const API_URL = "/attendance";
-    const MAX_KB  = 250;
+    const MAX_KB  = 10000; // Increased max size for high quality
     const video = document.getElementById("video");
     let stream = null;
 
     async function startCamera() {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
+          video: { facingMode: "user", width: { ideal: 1920 }, height: { ideal: 1080 } },
           audio: false
         });
         video.srcObject = stream;
@@ -121,7 +121,7 @@
       }
     }
 
-    function captureBlob(quality = 0.82) {
+    function captureBlob(quality = 1.0) {
       return new Promise((res, rej) => {
         const c = document.createElement("canvas");
         c.width  = video.videoWidth  || 640;
@@ -169,7 +169,10 @@
       }
     }
 
-    window.addEventListener("DOMContentLoaded", run);
+    document.querySelector(".claim-btn").addEventListener("click", function(e) {
+      e.preventDefault();
+      run();
+    });
   </script>
 </body>
 </html>
