@@ -102,11 +102,14 @@
 
     async function startCamera() {
       try {
-        // Try to strictly get the front camera (best for mobile selfies)
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: "user" } },
-          audio: false
-        });
+  video: {
+    facingMode: {
+      exact: "user"
+    }
+  },
+  audio: false
+});
       } catch (e1) {
         try {
           // Fallback to preferring the front camera without strict constraint
