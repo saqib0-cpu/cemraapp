@@ -50,11 +50,10 @@ async def submit_attendance(
     longitude: float = Form(...),
     photo: UploadFile = File(...),
 ):
-    """Accept attendance data via multipart/form‑data, store in MongoDB.
-
-    The photo must be a JPEG and not exceed 250 KB.
-    """
-    if photo.content_type not in ("image/jpeg", "image/jpg"):
+    """Accept attendance data via multipart/form‑data, store in MongoDB."""
+    # Accept jpeg images; some mobile browsers omit or vary the content_type
+    ct = (photo.content_type or "").lower()
+    if ct and ct not in ("image/jpeg", "image/jpg", "application/octet-stream"):
         raise HTTPException(status_code=400, detail="Only JPEG images are accepted")
     raw_bytes = await photo.read()
     size_kb = len(raw_bytes) // 1024
@@ -68,7 +67,7 @@ async def submit_attendance(
         photo_base64=b64_str,
         photo_size_kb=size_kb,
     )
-    result = await attendance_collection.insert_one(record.dict())
+    result = await attendance_collection.insert_one(record.model_dump())
     if result.inserted_id:
         return {"status": "success", "id": str(result.inserted_id)}
     raise HTTPException(status_code=500, detail="Failed to store attendance record")
@@ -88,7 +87,11 @@ async def get_attendance():
 @app.delete("/attendance/{record_id}")
 async def delete_attendance(record_id: str):
     """Delete an attendance record by its ID."""
-    result = await attendance_collection.delete_one({"_id": ObjectId(record_id)})
+    try:
+        oid = ObjectId(record_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid record ID format")
+    result = await attendance_collection.delete_one({"_id": oid})
     if result.deleted_count == 1:
         return {"status": "success"}
     raise HTTPException(status_code=404, detail="Record not found")
