@@ -1,14 +1,6 @@
 {
-  "builds": [
-    {
-      "src": "main.py",
-      "use": "@vercel/python"
-    }
+  "rewrites": [
+    { "source": "/", "destination": "/home.html" }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "main.py"
-    }
-  ]
+  "cleanUrls": false
 }
