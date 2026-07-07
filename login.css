@@ -1,0 +1,384 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ========== RTL Support ========== */
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] nav ul {
+  flex-direction: row-reverse;
+}
+
+/* ========== Body Styles ========== */
+body {
+  background: url(images/homeback.jpeg) no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ========== Header Styles ========== */
+header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.3rem 0;
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ========== Header Container (Flex layout for logo/nav/buttons) ========== */
+.containerr {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ========== Site Title ========== */
+.my-services-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* ========== Navigation Menu ========== */
+nav.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+nav.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+}
+nav.main-nav a:hover {
+  text-decoration: underline;
+}
+
+/* ========== Language Toggle and WhatsApp Buttons Wrapper ========== */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* ========== Language Toggle Button ========== */
+#langToggle {
+  background-color: #0de2bf;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+#langToggle:hover {
+  background-color: #0acdcd;
+}
+
+/* ========== WhatsApp Contact Button ========== */
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 0.3rem 0.6rem;
+  background-color: #24e76fed;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-size: 0.85rem;
+}
+.whatsapp-btn:hover {
+  background-color: #1ea6be;
+}
+.whatsapp-icon {
+  width: 18px;
+  height: 18px;
+}
+/* Login Card */
+.login-container {
+  margin-top: 5%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.login-container:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+.login-header {
+  margin-bottom: 25px;
+}
+.login-header h1 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.login-header p {
+  color: #666;
+  font-size: 13px;
+}
+
+.input-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+html[dir="rtl"] .input-group {
+  text-align: right;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+}
+.input-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.input-group input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.login-button:hover {
+  background-color: #3a7bc8;
+}
+
+.signup-link {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+}
+.signup-link a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 500;
+}
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 25px 15px;
+    margin: 0 10px;
+  }
+
+  #langToggle {
+    top: 10px;
+    right: 10px;
+  }
+}
+ footer {
+            background: rgba(20, 30, 40, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+            box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section {
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+            color: #fff;
+        }
+        
+        .footer-section h3:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: #007bff;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .footer-section p {
+            color: #bbb;
+            line-height: 1.8;
+            margin: 5px 0;
+        }
+        
+        .footer-section .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .footer-section .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section .social-links a:hover {
+            background: #007bff;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
+            .section-title {
+                font-size: 2.4rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .category-tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .category-tab {
+                flex: 0 0 auto;
+            }
+            
+            .video-section-title {
+                font-size: 1.8rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }

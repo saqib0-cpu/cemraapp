@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ========== RTL Support ========== */
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] nav ul {
+  flex-direction: row-reverse;
+}
+
+/* ========== Body Styles ========== */
+body {
+  background: url(images/homeback.jpeg) no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ========== Header Styles ========== */
+header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.3rem 0;
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ========== Header Container (Flex layout for logo/nav/buttons) ========== */
+.containerr {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ========== Site Title ========== */
+.my-services-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* ========== Navigation Menu ========== */
+nav.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+nav.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+}
+nav.main-nav a:hover {
+  text-decoration: underline;
+}
+
+/* ========== Language Toggle and WhatsApp Buttons Wrapper ========== */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* ========== Language Toggle Button ========== */
+#langToggle {
+  background-color: #0de2bf;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+#langToggle:hover {
+  background-color: #0acdcd;
+}
+
+/* ========== WhatsApp Contact Button ========== */
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 0.3rem 0.6rem;
+  background-color: #24e76fed;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-size: 0.85rem;
+}
+.whatsapp-btn:hover {
+  background-color: #1ea6be;
+}
+.whatsapp-icon {
+  width: 18px;
+  height: 18px;
+}

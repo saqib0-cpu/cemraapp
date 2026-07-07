@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Service Orders</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #eef2ff;
+      --secondary: #3f37c9;
+      --dark: #1e1e24;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #f72585;
+      --gray: #6c757d;
+      --gray-light: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .dashboard {
+      display: block; /* Changed to block to remove grid for sidebar */
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles - Removed entirely */
+
+    /* Main Content Styles */
+    .main-content {
+      padding: 2rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-title h2 {
+      font-size: 1.75rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .page-title p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-info h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .user-info p {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    /* Stats Cards */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .stat-icon.orders {
+      background: linear-gradient(135deg, #4361ee, #3f37c9);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-title {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    /* Orders Table */
+    .card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gray-light);
+      color: var(--gray);
+    }
+
+    .btn-outline:hover {
+      background: var(--gray-light);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 0.9rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--primary-light);
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      transition: color 0.3s ease;
+      padding: 0.5rem;
+    }
+
+    .action-btn:hover {
+      color: var(--primary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--gray-light);
+    }
+
+    .empty-state h3 {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+
+      .main-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <main class="main-content">
+      <div class="header">
+        <div class="page-title">
+          <h2>Service Orders Dashboard</h2>
+          <p>Manage and track all service orders</p>
+        </div>
+        <div class="user-profile">
+          <img src="images/ismail.jpg" alt="User" class="user-img">
+          <div class="user-info">
+            <h4>Ismail Khan</h4>
+            <p>Admin</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div>
+              <p class="stat-title">Total Orders</p>
+              <h3 class="stat-value" id="totalOrders">0</h3>
+            </div>
+            <div class="stat-icon orders">
+              <i class="fas fa-clipboard-list"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Orders</h3>
+          <div class="card-actions">
+            <button class="btn btn-outline">
+              <i class="fas fa-filter"></i> Filter
+            </button>
+            <button class="btn btn-primary">
+              <i class="fas fa-plus"></i> New Order
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Services</th>
+                <th>Address</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orderBody">
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Loading orders...</h3>
+                    <p>Please wait while we fetch your data</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('http://localhost:8000/api/orders')
+        .then(res => res.json())
+        .then(data => {
+          const body = document.getElementById('orderBody');
+          body.innerHTML = '';
+
+          if (!data || data.length === 0) {
+            body.innerHTML = `
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">
+                    <i class="fas fa-clipboard"></i>
+                    <h3>No orders found</h3>
+                    <p>There are currently no service orders submitted</p>
+                  </div>
+                </td>
+              </tr>`;
+          } else {
+            // Update total orders count
+            document.getElementById('totalOrders').textContent = data.length;
+            
+            data.forEach(order => {
+              // Format date for demo
+              const randomDate = new Date();
+              randomDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 30));
+              const formattedDate = randomDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              });
+              
+              const row = `
+                <tr>
+                  <td>#${Math.floor(1000 + Math.random() * 9000)}</td>
+                  <td>${order.name ?? 'N/A'}</td>
+                  <td>${order.phone ?? 'N/A'}</td>
+                  <td>${order.services ?? 'N/A'}</td>
+                  <td>${order.address ?? 'N/A'}</td>
+                  <td>${formattedDate}</td>
+                  <td>
+                    <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>`;
+              body.insertAdjacentHTML('beforeend', row);
+            });
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching orders:', err);
+          document.getElementById('orderBody').innerHTML = `
+            <tr>
+              <td colspan="7">
+                <div class="empty-state">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <h3>Failed to load data</h3>
+                  <p>Server might be down. Please try again later.</p>
+                </div>
+              </td>
+            </tr>`;
+        });
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Previous head content remains the same -->
+    <style>
+        /* Previous styles remain the same */
+
+        /* Enhanced Upload Modal Styles */
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .upload-modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease;
+            position: relative;
+        }
+
+        .upload-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .upload-modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 0;
+        }
+
+        .upload-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .upload-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .upload-tab.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .upload-tab-content {
+            display: none;
+        }
+
+        .upload-tab-content.active {
+            display: block;
+        }
+
+        .upload-area {
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0,123,255,0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(0,123,255,0.1);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .upload-area p {
+            margin: 0;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .upload-area small {
+            color: #777;
+            display: block;
+            margin-top: 10px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .media-preview {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+
+        .clear-preview {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .url-input-container {
+            margin-top: 20px;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: #007bff;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .upload-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .upload-modal-content {
+                padding: 20px;
+            }
+            
+            .upload-tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .upload-tab {
+                border-bottom: 1px solid #eee;
+                border-left: 3px solid transparent;
+            }
+            
+            .upload-tab.active {
+                border-left-color: #007bff;
+                border-bottom-color: #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Previous body content remains the same until the modal section -->
+
+    <!-- Enhanced Upload Modal -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="upload-modal-content">
+            <div class="upload-modal-header">
+                <h3 class="upload-modal-title" id="modalTitle" data-en="Upload Media" data-ar="رفع الوسائط">Upload Media</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="upload-tabs">
+                <div class="upload-tab active" onclick="switchUploadTab('upload')" data-en="Upload" data-ar="رفع">Upload</div>
+                <div class="upload-tab" onclick="switchUploadTab('url')" data-en="From URL" data-ar="من رابط">From URL</div>
+            </div>
+            
+            <div class="upload-tab-content active" id="uploadTab">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p data-en="Click to browse or drag & drop files" data-ar="انقر للتصفح أو اسحب وأسقط الملفات">Click to browse or drag & drop files</p>
+                    <small data-en="Supports: JPG, PNG, GIF, MP4, WEBM (Max: 50MB)" data-ar="يدعم: JPG, PNG, GIF, MP4, WEBM (الحد الأقصى: 50MB)">Supports: JPG, PNG, GIF, MP4, WEBM (Max: 50MB)</small>
+                </div>
+                
+                <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
+                
+                <div class="preview-container" id="filePreviewContainer">
+                    <!-- Preview will be inserted here -->
+                </div>
+                
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="upload-tab-content" id="urlTab">
+                <div class="url-input-container">
+                    <input type="text" class="url-input" id="mediaUrl" 
+                           placeholder="Enter image or video URL" 
+                           data-en="Enter image or video URL" 
+                           data-ar="أدخل رابط الصورة أو الفيديو">
+                    <button class="service-cta" onclick="previewUrl()" style="width:100%;" 
+                            data-en="Preview" data-ar="معاينة">Preview</button>
+                </div>
+                
+                <div class="preview-container" id="urlPreviewContainer">
+                    <!-- URL preview will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="upload-actions">
+                <button class="upload-btn cancel" onclick="closeModal()" 
+                        data-en="Cancel" data-ar="إلغاء">Cancel</button>
+                <button class="upload-btn confirm" onclick="uploadMedia()" 
+                        data-en="Upload" data-ar="رفع">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Previous JavaScript remains the same
+
+        // Enhanced Media Upload Functions
+        let selectedFile = null;
+        let currentMediaElement = null;
+        let currentIsVideo = false;
+        let currentTab = 'upload';
+
+        function switchUploadTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.upload-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.upload-tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`.upload-tab[onclick="switchUploadTab('${tab}')"]`).classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Check file size (max 50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                alert(document.documentElement.lang === 'en' ? 
+                    'File size exceeds 50MB limit' : 'حجم الملف يتجاوز الحد المسموح به 50MB');
+                return;
+            }
+            
+            selectedFile = file;
+            const previewContainer = document.getElementById('filePreviewContainer');
+            previewContainer.innerHTML = '';
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-preview';
+            clearBtn.innerHTML = '<i class="fas fa-times"></i>';
+            clearBtn.onclick = function() {
+                previewContainer.innerHTML = '';
+                document.getElementById('fileInput').value = '';
+                selectedFile = null;
+            };
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.className = 'media-preview';
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img);
+                    previewContainer.appendChild(clearBtn);
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.className = 'media-preview';
+                video.src = URL.createObjectURL(file);
+                video.controls = true;
+                previewContainer.appendChild(video);
+                previewContainer.appendChild(clearBtn);
+            }
+        }
+
+        function previewUrl() {
+            const url = document.getElementById('mediaUrl').value.trim();
+            if (!url) {
+                alert(document.documentElement.lang === 'en' ? 
+                    'Please enter a URL' : 'الرجاء إدخال رابط');
+                return;
+            }
+            
+            const previewContainer = document.getElementById('urlPreviewContainer');
+            previewContainer.innerHTML = '';
+            
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'clear-preview';
+            clearBtn.innerHTML = '<i class="fas fa-times"></i>';
+            clearBtn.onclick = function() {
+                previewContainer.innerHTML = '';
+                document.getElementById('mediaUrl').value = '';
+            };
+            
+            if (url.match(/\.(jpeg|jpg|gif|png)$/i) {
+                // Image URL
+                const img = document.createElement('img');
+                img.className = 'media-preview';
+                img.src = url;
+                img.onerror = function() {
+                    previewContainer.innerHTML = '<p style="color:red; text-align:center;">' + 
+                        (document.documentElement.lang === 'en' ? 
+                         'Invalid image URL' : 'رابط الصورة غير صالح') + '</p>';
+                };
+                previewContainer.appendChild(img);
+                previewContainer.appendChild(clearBtn);
+            } else if (url.match(/\.(mp4|webm|ogg)$/i) {
+                // Video URL
+                const video = document.createElement('video');
+                video.className = 'media-preview';
+                video.src = url;
+                video.controls = true;
+                video.onerror = function() {
+                    previewContainer.innerHTML = '<p style="color:red; text-align:center;">' + 
+                        (document.documentElement.lang === 'en' ? 
+                         'Invalid video URL' : 'رابط الفيديو غير صالح') + '</p>';
+                };
+                previewContainer.appendChild(video);
+                previewContainer.appendChild(clearBtn);
+            } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                // YouTube URL
+                const videoId = getYouTubeId(url);
+                if (videoId) {
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'media-preview';
+                    iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                    iframe.frameBorder = '0';
+                    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                    iframe.allowFullscreen = true;
+                    previewContainer.appendChild(iframe);
+                    previewContainer.appendChild(clearBtn);
+                } else {
+                    previewContainer.innerHTML = '<p style="color:red; text-align:center;">' + 
+                        (document.documentElement.lang === 'en' ? 
+                         'Invalid YouTube URL' : 'رابط يوتيوب غير صالح') + '</p>';
+                }
+            } else if (url.includes('vimeo.com')) {
+                // Vimeo URL
+                const videoId = getVimeoId(url);
+                if (videoId) {
+                    const iframe = document.createElement('iframe');
+                    iframe.className = 'media-preview';
+                    iframe.src = `https://player.vimeo.com/video/${videoId}`;
+                    iframe.frameBorder = '0';
+                    iframe.allow = 'autoplay; fullscreen';
+                    iframe.allowFullscreen = true;
+                    previewContainer.appendChild(iframe);
+                    previewContainer.appendChild(clearBtn);
+                } else {
+                    previewContainer.innerHTML = '<p style="color:red; text-align:center;">' + 
+                        (document.documentElement.lang === 'en' ? 
+                         'Invalid Vimeo URL' : 'رابط فيمو غير صالح') + '</p>';
+                }
+            } else {
+                previewContainer.innerHTML = '<p style="color:red; text-align:center;">' + 
+                    (document.documentElement.lang === 'en' ? 
+                     'Unsupported URL format' : 'صيغة الرابط غير مدعومة') + '</p>';
+            }
+        }
+
+        function uploadMedia() {
+            if (currentTab === 'upload') {
+                if (!selectedFile) {
+                    alert(document.documentElement.lang === 'en' ? 
+                        'Please select a file' : 'الرجاء اختيار ملف');
+                    return;
+                }
+                
+                // Simulate upload progress (in a real app, you would use AJAX/Fetch)
+                const progressBar = document.getElementById('progressBar');
+                const uploadProgress = document.getElementById('uploadProgress');
+                uploadProgress.style.display = 'block';
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        updateMediaElement();
+                        closeModal();
+                    }
+                }, 200);
+                
+            } else { // URL tab
+                const url = document.getElementById('mediaUrl').value.trim();
+                if (!url) {
+                    alert(document.documentElement.lang === 'en' ? 
+                        'Please enter a URL' : 'الرجاء إدخال رابط');
+                    return;
+                }
+                
+                updateMediaElement();
+                closeModal();
+            }
+        }
+
+        function updateMediaElement() {
+            if (!currentMediaElement) return;
+            
+            if (currentTab === 'upload' && selectedFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (currentIsVideo) {
+                        // For video elements
+                        const videoContainer = currentMediaElement.parentElement;
+                        const newVideo = document.createElement('video');
+                        newVideo.src = e.target.result;
+                        newVideo.controls = true;
+                        newVideo.style.width = '100%';
+                        newVideo.style.height = '100%';
+                        newVideo.style.objectFit = 'cover';
+                        
+                        videoContainer.innerHTML = '';
+                        videoContainer.appendChild(newVideo);
+                        // Re-add the edit button
+                        addEditButton(videoContainer, currentMediaElement.id, true);
+                    } else {
+                        // For images
+                        currentMediaElement.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(selectedFile);
+            } else { // URL tab
+                const url = document.getElementById('mediaUrl').value.trim();
+                if (!url) return;
+                
+                if (currentIsVideo) {
+                    const videoContainer = currentMediaElement.parentElement;
+                    videoContainer.innerHTML = '';
+                    
+                    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                        const videoId = getYouTubeId(url);
+                        if (videoId) {
+                            const iframe = document.createElement('iframe');
+                            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                            iframe.style.width = '100%';
+                            iframe.style.height = '100%';
+                            iframe.frameBorder = '0';
+                            iframe.allowFullscreen = true;
+                            videoContainer.appendChild(iframe);
+                        }
+                    } else if (url.includes('vimeo.com')) {
+                        const videoId = getVimeoId(url);
+                        if (videoId) {
+                            const iframe = document.createElement('iframe');
+                            iframe.src = `https://player.vimeo.com/video/${videoId}`;
+                            iframe.style.width = '100%';
+                            iframe.style.height = '100%';
+                            iframe.frameBorder = '0';
+                            iframe.allowFullscreen = true;
+                            videoContainer.appendChild(iframe);
+                        }
+                    } else {
+                        const video = document.createElement('video');
+                        video.src = url;
+                        video.controls = true;
+                        video.style.width = '100%';
+                        video.style.height = '100%';
+                        videoContainer.appendChild(video);
+                    }
+                    
+                    // Re-add the edit button
+                    addEditButton(videoContainer, currentMediaElement.id, true);
+                } else {
+                    currentMediaElement.src = url;
+                }
+            }
+        }
+
+        function addEditButton(container, targetId, isVideo) {
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-media-btn';
+            editBtn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+            editBtn.onclick = function() {
+                openMediaUploadModal(this);
+            };
+            editBtn.setAttribute('data-target', targetId);
+            editBtn.setAttribute('data-is-video', isVideo.toString());
+            container.appendChild(editBtn);
+        }
+
+        // Make the upload area a drop zone
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.background = 'rgba(0,123,255,0.2)';
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                this.style.background = 'rgba(0,123,255,0.05)';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.background = 'rgba(0,123,255,0.05)';
+                
+                if (e.dataTransfer.files.length) {
+                    document.getElementById('fileInput').files = e.dataTransfer.files;
+                    handleFileSelect({ target: document.getElementById('fileInput') });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

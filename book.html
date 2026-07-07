@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service Order Form</title>
+  <style>
+    :root {
+  --primary: #4368ee;
+  --primary-dark: #436eee;
+  --secondary: #435aee;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --border-radius: 12px;
+  --box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url(images/homeback.jpeg) no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+/* ========== Global Reset and Base Styles ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ========== RTL Support ========== */
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] nav ul {
+  flex-direction: row-reverse;
+}
+
+/* ========== Body Styles ========== */
+body {
+  background: url(images/homeback.jpeg) no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ========== Header Styles ========== */
+header {
+  background-color: #00b3ff95;
+  color: white;
+  padding: 0.3rem 0;
+  width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ========== Header Container (Flex layout for logo/nav/buttons) ========== */
+.containerr {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ========== Site Title ========== */
+.my-services-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+/* ========== Navigation Menu ========== */
+nav.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+nav.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+}
+nav.main-nav a:hover {
+  text-decoration: underline;
+}
+
+/* ========== Language Toggle and WhatsApp Buttons Wrapper ========== */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* ========== Language Toggle Button ========== */
+#langToggle {
+  background-color: #0de2bf;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+#langToggle:hover {
+  background-color: #0acdcd;
+}
+
+/* ========== WhatsApp Contact Button ========== */
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 0.3rem 0.6rem;
+  background-color: #24e76fed;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-size: 0.85rem;
+}
+.whatsapp-btn:hover {
+  background-color: #1ea6be;
+}
+.whatsapp-icon {
+  width: 18px;
+  height: 18px;
+}
+.order-container {
+  margin-top: 5%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 480px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.order-container:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px 0 rgba(0, 0, 0, 0.25);
+}
+/* Responsive: Stack on Mobile */
+@media (max-width: 992px) { /* Adjust breakpoint for tablet/laptop collapse */
+  .containerr {
+    flex-direction: column; /* Stack header items vertically */
+    gap: 1rem; /* Space between stacked header items */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .my-services-title {
+    text-align: center;
+    width: 100%; /* Take full width when stacked */
+  }
+
+  nav.main-nav ul {
+    flex-direction: column; /* Stack nav links vertically */
+    width: 100%;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .header-buttons {
+    width: 100%;
+    justify-content: center; /* Center buttons when stacked */
+  }
+
+  /* Ensure the header itself is responsive */
+  header {
+    padding: 0.6rem 0; /* More padding for mobile header */
+  }
+}
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+h2 {
+  text-align: center;
+  margin-bottom: 1rem; /* reduced spacing */
+  color: var(--primary);
+  font-size: 1.6rem; /* slightly smaller */
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.form-group {
+  margin-bottom: 0.6rem; /* reduced spacing */
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem; /* reduced */
+  font-weight: 500;
+  color: var(--dark);
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.4rem 0.55rem; /* tighter padding */
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  font-size: 0.85rem;
+  transition: var(--transition);
+  background-color: var(--light);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 48px; /* reduced height */
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* tighter gap */
+  margin-top: 0.4rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-item input {
+  width: auto;
+  margin-right: 0.5rem;
+  accent-color: var(--primary);
+}
+
+.note {
+  font-size: 0.75rem;
+  color: var(--gray);
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.45rem; /* smaller button */
+  background-color: var(--primary);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 0.3rem;
+  letter-spacing: 0.3px;
+}
+
+.submit-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+/* Animation for form elements */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Delays for each form group */
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-group:nth-child(3) { animation-delay: 0.3s; }
+.form-group:nth-child(4) { animation-delay: 0.4s; }
+button.form-group { animation-delay: 0.5s; }
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .order-container {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+ footer {
+            background: rgba(20, 30, 40, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+            box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section {
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+            color: #fff;
+        }
+        
+        .footer-section h3:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: #007bff;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .footer-section p {
+            color: #bbb;
+            line-height: 1.8;
+            margin: 5px 0;
+        }
+        
+        .footer-section .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .footer-section .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section .social-links a:hover {
+            background: #007bff;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
+            .section-title {
+                font-size: 2.4rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .category-tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .category-tab {
+                flex: 0 0 auto;
+            }
+            
+            .video-section-title {
+                font-size: 1.8rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+  </style>
+</head>
+<body>
+<header>
+    <div class="containerr">
+      <h1 class="my-services-title" data-en="PrimeFix Maintenance Services" data-ar="خدمات الصيانة من برايم فيكس">PrimeFix Maintenance Services</h1>
+
+      <nav class="main-nav"> <ul class="d-flex flex-md-row justify-content-center align-items-center gap-3 m-0 p-0 list-unstyled">
+          <li><a href="home.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+          <li><a href="aboutus.html" data-en="About Us" data-ar="معلومات عنا">About Us</a></li>
+          <li><a href="book.html" data-en="Book Services" data-ar="حجز الخدمات">Book Services</a></li>
+          <li><a href="login.html" data-en="Login" data-ar="تسجيل الدخول">Login</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-buttons d-flex align-items-center gap-2"> <button id="langToggle" onclick="toggleLanguage()">عربي</button>
+        <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-btn" id="whatsappBtn" data-en="WhatsApp" data-ar="واتساب">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" />
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <div class="order-container">
+    <h2 data-en="Book Services" data-ar="خدمات الحجز">Book Service</h2>
+    <form id="orderForm">
+      <div class="form-group">
+        <label for="name" data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
+        <input type="text" id="name" required  />
+      </div>
+      <div class="form-group">
+        <label for="phone" data-en="Phone Number" data-ar=" رقم الهاتف">Phone Number</label>
+        <input type="tel" id="phone" pattern="[0-9]{10,15}"  />
+      </div>
+      <div class="form-group">
+        <label data-en="Select Services" data-ar="اختر الخدمات">Select Services (Max 3)</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" name="service" value="Painting Services"> 
+            <span data-en="Painting Services" data-ar="خدمات الطلاء">Painting Services</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="service" value="Electrician Services"> 
+            <span data-en="Electrician Services" data-ar="خدمات الكهرباء">Electrician Services</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" name="service" value="Plumbing"> 
+            <span data-en="Plumbing Services" data-ar="خدمات السباكة">Plumbing Services</span>
+          </label>
+        </div>
+        <div class="note" data-en="Please select 1-3 services you require" data-ar="يرجى اختيار من خدمة إلى ثلاث خدمات مطلوب">Please select 1-3 services you require</div>
+      </div>
+      <div class="form-group">
+        <label for="address" data-en="Entre Address" data-ar="أدخل العنوان">Entre Address</label>
+        <textarea id="address" required placeholder="Enter your full address including zip code"></textarea>
+      </div>
+      <button type="submit" class="submit-button" data-en="book" data-ar="احجز">book</button>
+    </form>
+  </div>
+<footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3 data-en="Quick Links" data-ar="روابط سريعة">Quick Links</h3>
+        <ul>
+          <li><a href="home.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+          <li><a href="services.html" data-en="Services" data-ar="الخدمات">Services</a></li>
+          <li><a href="aboutus.html" data-en="About Us" data-ar="معلومات عنا">About Us</a></li>
+          <li><a href="contact.html" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
+          <li><a href="blog.html" data-en="Blog" data-ar="المدونة">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Our Services" data-ar="خدماتنا">Our Services</h3>
+        <ul>
+          <li><a href="#plumbing-category" data-en="Plumbing Services" data-ar="خدمات السباكة">Plumbing Services</a></li>
+          <li><a href="#electrical-category" data-en="Electrical Services" data-ar="خدمات الكهرباء">Electrical Services</a></li>
+          <li><a href="#painting-category" data-en="Painting Services" data-ar="خدمات الدهان">Painting Services</a></li>
+          <li><a href="#" data-en="Maintenance" data-ar="الصيانة">Maintenance</a></li>
+          <li><a href="#" data-en="Renovation" data-ar="التجديد">Renovation</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Contact Info" data-ar="معلومات التواصل">Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> <span data-en="123 Service St, City, Country" data-ar="123 شارع الخدمة، المدينة، البلد">123 Service St, City, Country</span></p>
+        <p><i class="fas fa-phone"></i> <span data-en="+123 456 7890" data-ar="+123 456 7890">+123 456 7890</span></p>
+        <p><i class="fas fa-envelope"></i> info@services.com</p>
+        <p><i class="fas fa-clock"></i> <span data-en="Mon-Sun: 8:00 AM - 10:00 PM" data-ar="من الاثنين إلى الأحد: 8 صباحًا - 10 مساءً">Mon-Sun: 8:00 AM - 10:00 PM</span></p>
+        
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Newsletter" data-ar="النشرة الإخبارية">Newsletter</h3>
+        <p data-en="Subscribe to our newsletter for the latest updates and offers." 
+           data-ar="اشترك في نشرتنا الإخبارية للحصول على آخر التحديثات والعروض.">
+          Subscribe to our newsletter for the latest updates and offers.
+        </p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Your Email" data-en="Your Email" data-ar="بريدك الإلكتروني" required>
+          <button type="submit" data-en="Subscribe" data-ar="اشتراك">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p data-en="&copy; 2023 Home Services. All Rights Reserved. | Designed with ❤️ by Your Company" 
+         data-ar="&copy; 2023 خدمات المنزل. جميع الحقوق محفوظة. | صمم ب❤️ بواسطة شركتك">
+        &copy; 2023 Home Services. All Rights Reserved. | Designed with ❤️ by Your Company
+      </p>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('orderForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const checkedServices = Array.from(document.querySelectorAll('input[name="service"]:checked'))
+        .map(cb => cb.value);
+
+      if (checkedServices.length === 0 || checkedServices.length > 3) {
+        alert("Please select 1 to 3 services.");
+        return;
+      }
+
+      fetch('http://localhost:8000/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          phone: phone,
+          services: checkedServices.join(", "),
+          address: address
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        document.getElementById('orderForm').reset();
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("Booking failed. Please try again.");
+      });
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

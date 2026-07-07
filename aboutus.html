@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="contact.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+    <style>
+        /* Modern Service Catalog Styles */
+        .service-catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1400px;
+            padding: 0 20px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+            border-color: #e0e0e0;
+        }
+        
+        .service-image-container {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .service-card:hover .service-image {
+            transform: scale(1.08);
+        }
+        
+        .service-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+        
+        .service-title {
+            color: white;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .service-content {
+            padding: 25px;
+        }
+        
+        .service-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+        
+        .service-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .service-features li {
+            display: flex;
+            align-items: center;
+            color: #444;
+            font-size: 0.95rem;
+            padding: 8px 0;
+        }
+        
+        .service-features li:before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #007bff;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .service-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #007bff;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.05rem;
+        }
+        
+        .service-cta:hover {
+            background: #0069d9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin: 60px 0 40px;
+            position: relative;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            color: #222;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #007bff;
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            color: #777;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+        
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .category-tab {
+            padding: 14px 28px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #555;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        }
+        
+        .category-tab.active, .category-tab:hover {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+        }
+        
+        .service-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #007bff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        /* Video Section Styles */
+        .video-section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        
+        .video-section-title {
+            font-size: 2.2rem;
+            color: #222;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .video-section-title:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #007bff;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .video-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+        
+        .video-description {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        footer {
+            background: rgba(20, 30, 40, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+            box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section {
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+            color: #fff;
+        }
+        
+        .footer-section h3:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: #007bff;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .footer-section p {
+            color: #bbb;
+            line-height: 1.8;
+            margin: 5px 0;
+        }
+        
+        .footer-section .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .footer-section .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section .social-links a:hover {
+            background: #007bff;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+            
+            .section-title {
+                font-size: 2.4rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .service-catalog, .video-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .service-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .category-tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .category-tab {
+                flex: 0 0 auto;
+            }
+            
+            .video-section-title {
+                font-size: 1.8rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+  
+ <header>
+    <div class="containerr">
+      <h1 class="my-services-title" data-en="PrimeFix Maintenance Services" data-ar="خدمات الصيانة من برايم فيكس">PrimeFix Maintenance Services</h1>
+
+      <nav class="main-nav"> <ul class="d-flex flex-md-row justify-content-center align-items-center gap-3 m-0 p-0 list-unstyled">
+          <li><a href="home.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+          <li><a href="aboutus.html" data-en="About Us" data-ar="معلومات عنا">About Us</a></li>
+          <li><a href="book.html" data-en="Book Services" data-ar="حجز الخدمات">Book Services</a></li>
+          <li><a href="login.html" data-en="Login" data-ar="تسجيل الدخول">Login</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-buttons d-flex align-items-center gap-2"> <button id="langToggle" onclick="toggleLanguage()">عربي</button>
+        <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-btn" id="whatsappBtn" data-en="WhatsApp" data-ar="واتساب">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" />
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  
+  <section id="services">
+    <div class="section-header">
+      <h2 class="section-title" data-en="Premium Home Services" data-ar="خدمات منزلية مميزة">Premium Home Services</h2>
+      <p class="section-subtitle" data-en="Professional solutions for your home with guaranteed quality and satisfaction" 
+         data-ar="حلول احترافية لمنزلك مع ضمان الجودة والرضا">
+        Professional solutions for your home with guaranteed quality
+      </p>
+    </div>
+    
+    <div class="category-tabs">
+      <div class="category-tab active" data-category="plumbing" data-en="Plumbing" data-ar="السباكة">Plumbing</div>
+      <div class="category-tab" data-category="electrical" data-en="Electrical" data-ar="الكهرباء">Electrical</div>
+      <div class="category-tab" data-category="painting" data-en="Painting" data-ar="الدهان">Painting</div>
+    </div>
+    
+    <!-- Plumbing Services -->
+    <div class="service-category" id="plumbing-category">
+      <div class="service-catalog">
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.pumbling/cat.pum.1.jpg" alt="Plumbing Service" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Leak Repair" data-ar="إصلاح التسرب">Leak Repair</h3>
+            </div>
+            <div class="service-badge" data-en="24/7 Service" data-ar="خدمة 24/7">24/7 Service</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Professional leak detection and repair services using advanced technology to prevent water damage." 
+               data-ar="خدمات الكشف عن التسرب وإصلاحه باستخدام التكنولوجيا المتقدمة لمنع تلف المياه.">
+              Professional leak detection and repair services using advanced technology.
+            </p>
+            <ul class="service-features">
+              <li data-en="Pipe inspection" data-ar="فحص الأنابيب">Pipe inspection</li>
+              <li data-en="Non-destructive repair" data-ar="إصلاح غير مدمر">Non-destructive repair</li>
+              <li data-en="Pressure testing" data-ar="اختبار الضغط">Pressure testing</li>
+              <li data-en="Warranty included" data-ar="يشمل الضمان">Warranty included</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.pumbling/cat.pum.2.jpg" alt="Bathroom Plumbing" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Bathroom Plumbing" data-ar="سباكة الحمام">Bathroom Plumbing</h3>
+            </div>
+            <div class="service-badge" data-en="Popular" data-ar="شائع">Popular</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Complete bathroom plumbing solutions including installations, repairs, and luxury upgrades." 
+               data-ar="حلول سباكة الحمامات الكاملة بما في ذلك التركيبات والإصلاحات والترقيات الفاخرة.">
+              Complete bathroom plumbing solutions including installations.
+            </p>
+            <ul class="service-features">
+              <li data-en="Shower installation" data-ar="تركيب الدش">Shower installation</li>
+              <li data-en="Toilet repair" data-ar="إصلاح المرحاض">Toilet repair</li>
+              <li data-en="Pipe replacement" data-ar="استبدال الأنابيب">Pipe replacement</li>
+              <li data-en="Water pressure" data-ar="ضغط المياه">Water pressure</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.pumbling/cat.pum.3.jpg" alt="Water Heating" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Water Heating" data-ar="تسخين المياه">Water Heating</h3>
+            </div>
+            <div class="service-badge" data-en="Eco-Friendly" data-ar="صديق للبيئة">Eco-Friendly</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Efficient water heater installation, repair and maintenance for all types of systems." 
+               data-ar="تركيب سخان المياه الفعال وإصلاحه وصيانته لجميع أنواع الأنظمة.">
+              Efficient water heater installation, repair and maintenance.
+            </p>
+            <ul class="service-features">
+              <li data-en="Tankless heaters" data-ar="سخانات بدون خزان">Tankless heaters</li>
+              <li data-en="Solar heating" data-ar="التسخين الشمسي">Solar heating</li>
+              <li data-en="Annual maintenance" data-ar="الصيانة السنوية">Annual maintenance</li>
+              <li data-en="Energy saving" data-ar="توفير الطاقة">Energy saving</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+
+          
+        </div>
+      </div>
+
+      <!-- Plumbing Videos Section -->
+      <div class="video-section">
+        <h3 class="video-section-title" data-en="Plumbing Service Videos" data-ar="فيديوهات خدمات السباكة">Plumbing Service Videos</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/img.pumbling/vedio one publing.mp4 " frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="How We Fix Leaks" data-ar="كيف نصلح التسريبات">How We Fix Leaks</h4>
+              <p class="video-description" data-en="See our professional leak detection and repair process in action." 
+                 data-ar="شاهد عملية الكشف عن التسرب وإصلاحه الاحترافية لدينا أثناء العمل.">
+                See our professional leak detection and repair process in action.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/img.pumbling/pumbling vedio 2.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Bathroom Installation" data-ar="تركيب الحمام">Bathroom Installation</h4>
+              <p class="video-description" data-en="Watch our team install a complete bathroom plumbing system." 
+                 data-ar="شاهد فريقنا يقوم بتركيب نظام سباكة حمام كامل.">
+                Watch our team install a complete bathroom plumbing system.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/img.pumbling/pumbling vedio3.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Water Heater Maintenance" data-ar="صيانة سخان المياه">Water Heater Maintenance</h4>
+              <p class="video-description" data-en="Learn how we maintain water heaters for optimal performance." 
+                 data-ar="تعلم كيف نقوم بصيانة سخانات المياه للحصول على أفضل أداء.">
+                Learn how we maintain water heaters for optimal performance.
+              </p>
+            </div>
+          </div>
+          
+          <!-- New Plumbing Video -->
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example10" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Pipe Replacement Techniques" data-ar="تقنيات استبدال الأنابيب">Pipe Replacement Techniques</h4>
+              <p class="video-description" data-en="Modern methods for pipe replacement with minimal disruption to your home." 
+                 data-ar="الأساليب الحديثة لاستبدال الأنابيب مع الحد الأدنى من الإزعاج لمنزلك.">
+                Modern methods for pipe replacement with minimal disruption to your home.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Electrical Services -->
+    <div class="service-category" id="electrical-category" style="display:none;">
+      <div class="service-catalog">
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.electration/1.jpg" alt="Electrical Wiring" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Electrical Wiring" data-ar="الأسلاك الكهربائية">Electrical Wiring</h3>
+            </div>
+            <div class="service-badge" data-en="Certified" data-ar="معتمد">Certified</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Professional electrical wiring services for new constructions and renovations." 
+               data-ar="خدمات الأسلاك الكهربائية الاحترافية للمباني الجديدة والتجديدات.">
+              Professional electrical wiring services for new constructions.
+            </p>
+            <ul class="service-features">
+              <li data-en="New installation" data-ar="تركيب جديد">New installation</li>
+              <li data-en="Panel upgrade" data-ar="ترقية اللوحة">Panel upgrade</li>
+              <li data-en="Safety checks" data-ar="فحوصات السلامة">Safety checks</li>
+              <li data-en="Code compliance" data-ar="الامتثال للكود">Code compliance</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.electration/2.jpg" alt="Lighting Solutions" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Lighting Solutions" data-ar="حلول الإضاءة">Lighting Solutions</h3>
+            </div>
+            <div class="service-badge" data-en="Smart" data-ar="ذكي">Smart</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Modern lighting installations including smart lighting systems and energy-efficient solutions." 
+               data-ar="تركيبات الإضاءة الحديثة بما في ذلك أنظمة الإضاءة الذكية والحلول الموفرة للطاقة.">
+              Modern lighting installations including smart lighting.
+            </p>
+            <ul class="service-features">
+              <li data-en="LED lighting" data-ar="إضاءة LED">LED lighting</li>
+              <li data-en="Smart controls" data-ar="ضوابط ذكية">Smart controls</li>
+              <li data-en="Outdoor lighting" data-ar="الإضاءة الخارجية">Outdoor lighting</li>
+              <li data-en="Dimmer switches" data-ar="مفاتيح تخفيف">Dimmer switches</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.electration/3.jpg" alt="Electrical Repairs" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Electrical Repairs" data-ar="إصلاحات كهربائية">Electrical Repairs</h3>
+            </div>
+            <div class="service-badge" data-en="Emergency" data-ar="طارئ">Emergency</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Reliable electrical repair services for all types of electrical issues and emergencies." 
+               data-ar="خدمات إصلاح كهربائية موثوقة لجميع أنواع المشكلات الكهربائية والطوارئ.">
+              Reliable electrical repair services for all issues.
+            </p>
+            <ul class="service-features">
+              <li data-en="Outlet repair" data-ar="إصلاح المنفذ">Outlet repair</li>
+              <li data-en="Circuit issues" data-ar="مشاكل الدائرة">Circuit issues</li>
+              <li data-en="Flickering lights" data-ar="أضواء وامضة">Flickering lights</li>
+              <li data-en="24/7 service" data-ar="خدمة 24/7">24/7 service</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Electrical Videos Section -->
+      <div class="video-section">
+        <h3 class="video-section-title" data-en="Electrical Service Videos" data-ar="فيديوهات الخدمات الكهربائية">Electrical Service Videos</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/vedio one publing.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Safe Wiring Practices" data-ar="ممارسات الأسلاك الآمنة">Safe Wiring Practices</h4>
+              <p class="video-description" data-en="Learn about our safety standards for electrical installations." 
+                 data-ar="تعرف على معايير السلامة الخاصة بنا للتركيبات الكهربائية.">
+                Learn about our safety standards for electrical installations.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/pumbling vedio3.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Smart Home Setup" data-ar="إعداد المنزل الذكي">Smart Home Setup</h4>
+              <p class="video-description" data-en="See how we install smart lighting and automation systems." 
+                 data-ar="شاهد كيف نقوم بتركيب أنظمة الإضاءة الذكية والأتمتة.">
+                See how we install smart lighting and automation systems.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="images/pumbling vedio2.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Emergency Repairs" data-ar="إصلاحات الطوارئ">Emergency Repairs</h4>
+              <p class="video-description" data-en="Our team handling urgent electrical repairs with safety and efficiency." 
+                 data-ar="فريقنا يتعامل مع إصلاحات الكهرباء العاجلة بأمان وكفاءة.">
+                Our team handling urgent electrical repairs with safety and efficiency.
+              </p>
+            </div>
+          </div>
+          
+          <!-- New Electrical Video -->
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example11" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Energy Saving Tips" data-ar="نصائح توفير الطاقة">Energy Saving Tips</h4>
+              <p class="video-description" data-en="Learn how to optimize your home's electrical system for maximum efficiency." 
+                 data-ar="تعلم كيفية تحسين نظام الكهرباء في منزلك للحصول على أقصى قدر من الكفاءة.">
+                Learn how to optimize your home's electrical system for maximum efficiency.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Painting Services -->
+    <div class="service-category" id="painting-category" style="display:none;">
+      <div class="service-catalog">
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.painting/1.jpg" alt="Interior Painting" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Interior Painting" data-ar="الدهان الداخلي">Interior Painting</h3>
+            </div>
+            <div class="service-badge" data-en="Premium" data-ar="ممتاز">Premium</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Professional interior painting services using premium quality, low-VOC paints for healthier homes." 
+               data-ar="خدمات الدهان الداخلي المحترفة باستخدام دهانات عالية الجودة ومنخفضة الرائحة للمنازل الصحية.">
+              Professional interior painting services.
+            </p>
+            <ul class="service-features">
+              <li data-en="Wall preparation" data-ar="تحضير الجدار">Wall preparation</li>
+              <li data-en="Color matching" data-ar="مطابقة الألوان">Color matching</li>
+              <li data-en="Clean finish" data-ar="إنهاء نظيف">Clean finish</li>
+              <li data-en="Odorless paint" data-ar="طلاء عديم الرائحة">Odorless paint</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.painting/2.jpg" alt="Exterior Painting" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Exterior Painting" data-ar="الدهان الخارجي">Exterior Painting</h3>
+            </div>
+            <div class="service-badge" data-en="Durable" data-ar="دائم">Durable</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Durable exterior painting services with weather-resistant coatings to protect your property." 
+               data-ar="خدمات الدهان الخارجي الدائمة مع الطلاءات المقاومة للعوامل الجوية لحماية ممتلكاتك.">
+              Durable exterior painting services.
+            </p>
+            <ul class="service-features">
+              <li data-en="Weatherproof" data-ar="مقاوم للعوامل الجوية">Weatherproof</li>
+              <li data-en="Surface prep" data-ar="تحضير السطح">Surface prep</li>
+              <li data-en="UV protection" data-ar="حماية من الأشعة">UV protection</li>
+              <li data-en="5-year warranty" data-ar="ضمان 5 سنوات">5-year warranty</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-image-container">
+            <img src="images/img.painting/3.jpg" alt="Decorative Finishes" class="service-image">
+            <div class="service-overlay">
+              <h3 class="service-title" data-en="Decorative Finishes" data-ar="النهايات الزخرفية">Decorative Finishes</h3>
+            </div>
+            <div class="service-badge" data-en="Luxury" data-ar="فاخر">Luxury</div>
+          </div>
+          <div class="service-content">
+            <p class="service-description" data-en="Custom decorative painting and specialty finishes to create unique interior spaces." 
+               data-ar="الطلاء الزخرفي المخصص والنهايات الخاصة لإنشاء مساحات داخلية فريدة.">
+              Custom decorative painting and finishes.
+            </p>
+            <ul class="service-features">
+              <li data-en="Venetian plaster" data-ar="الجص الفينيسي">Venetian plaster</li>
+              <li data-en="Faux finishes" data-ar="النهايات المزيفة">Faux finishes</li>
+              <li data-en="Metallic effects" data-ar="التأثيرات المعدنية">Metallic effects</li>
+              <li data-en="Custom designs" data-ar="تصاميم مخصصة">Custom designs</li>
+            </ul>
+            <button class="service-cta" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painting Videos Section -->
+      <div class="video-section">
+        <h3 class="video-section-title" data-en="Painting Service Videos" data-ar="فيديوهات خدمات الدهان">Painting Service Videos</h3>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example7" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Interior Painting Process" data-ar="عملية الدهان الداخلي">Interior Painting Process</h4>
+              <p class="video-description" data-en="See our step-by-step interior painting technique for flawless results." 
+                 data-ar="شاهد تقنية الدهان الداخلي خطوة بخطوة للحصول على نتائج لا تشوبها شائبة.">
+                See our step-by-step interior painting technique for flawless results.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Exterior Protection" data-ar="حماية الخارجية">Exterior Protection</h4>
+              <p class="video-description" data-en="How we prepare and protect exterior surfaces for long-lasting results." 
+                 data-ar="كيف نقوم بإعداد وحماية الأسطح الخارجية للحصول على نتائج تدوم طويلاً.">
+                How we prepare and protect exterior surfaces for long-lasting results.
+              </p>
+            </div>
+          </div>
+          
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example9" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Decorative Techniques" data-ar="تقنيات زخرفية">Decorative Techniques</h4>
+              <p class="video-description" data-en="Exploring our specialty decorative painting techniques for unique interiors." 
+                 data-ar="استكشاف تقنيات الدهان الزخرفي الخاصة بنا للديكورات الداخلية الفريدة.">
+                Exploring our specialty decorative painting techniques for unique interiors.
+              </p>
+            </div>
+          </div>
+          
+          <!-- New Painting Video -->
+          <div class="video-card">
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/example12" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h4 class="video-title" data-en="Color Selection Guide" data-ar="دليل اختيار الألوان">Color Selection Guide</h4>
+              <p class="video-description" data-en="Expert tips for choosing the perfect paint colors for your home." 
+                 data-ar="نصائح الخبراء لاختيار ألوان الطلاء المثالية لمنزلك.">
+                Expert tips for choosing the perfect paint colors for your home.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3 data-en="Quick Links" data-ar="روابط سريعة">Quick Links</h3>
+        <ul>
+          <li><a href="home.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
+          <li><a href="services.html" data-en="Services" data-ar="الخدمات">Services</a></li>
+          <li><a href="aboutus.html" data-en="About Us" data-ar="معلومات عنا">About Us</a></li>
+          <li><a href="contact.html" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
+          <li><a href="blog.html" data-en="Blog" data-ar="المدونة">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Our Services" data-ar="خدماتنا">Our Services</h3>
+        <ul>
+          <li><a href="#plumbing-category" data-en="Plumbing Services" data-ar="خدمات السباكة">Plumbing Services</a></li>
+          <li><a href="#electrical-category" data-en="Electrical Services" data-ar="خدمات الكهرباء">Electrical Services</a></li>
+          <li><a href="#painting-category" data-en="Painting Services" data-ar="خدمات الدهان">Painting Services</a></li>
+          <li><a href="#" data-en="Maintenance" data-ar="الصيانة">Maintenance</a></li>
+          <li><a href="#" data-en="Renovation" data-ar="التجديد">Renovation</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Contact Info" data-ar="معلومات التواصل">Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> <span data-en="123 Service St, City, Country" data-ar="123 شارع الخدمة، المدينة، البلد">123 Service St, City, Country</span></p>
+        <p><i class="fas fa-phone"></i> <span data-en="009718667512" data-ar="009718667512">009718667512</span></p>
+        <p><i class="fas fa-envelope"></i>ismailkhan132122@gmail.com</p>
+        <p><i class="fas fa-clock"></i> <span data-en="Mon-Sun: 8:00 AM - 10:00 PM" data-ar="من الاثنين إلى الأحد: 8 صباحًا - 10 مساءً">Mon-Sun: 8:00 AM - 10:00 PM</span></p>
+        
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3 data-en="Newsletter" data-ar="النشرة الإخبارية">Newsletter</h3>
+        <p data-en="Subscribe to our newsletter for the latest updates and offers." 
+           data-ar="اشترك في نشرتنا الإخبارية للحصول على آخر التحديثات والعروض.">
+          Subscribe to our newsletter for the latest updates and offers.
+        </p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Your Email" data-en="Your Email" data-ar="بريدك الإلكتروني" required>
+          <button type="submit" data-en="Subscribe" data-ar="اشتراك">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p data-en="&copy; 2023 Home Services. All Rights Reserved. | Designed with ❤️ by Your Company" 
+         data-ar="&copy; 2023 خدمات المنزل. جميع الحقوق محفوظة. | صمم ب❤️ بواسطة شركتك">
+        &copy; 2023 Home Services. All Rights Reserved. | Designed with ❤️ by Your Company
+      </p>
+    </div>
+  </footer>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <script>
+    // Language toggle functionality
+    document.getElementById('langToggle').addEventListener('click', function() {
+      const currentLang = document.documentElement.lang || 'en';
+      const newLang = currentLang === 'en' ? 'ar' : 'en';
+      document.documentElement.lang = newLang;
+      
+      // Update all elements with data-en and data-ar attributes
+      document.querySelectorAll('[data-en], [data-ar]').forEach(element => {
+        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+          element.placeholder = element.getAttribute(`data-${newLang}`);
+        } else {
+          element.textContent = element.getAttribute(`data-${newLang}`);
+        }
+      });
+      
+      // Update button text
+      this.textContent = newLang === 'en' ? 'عربي' : 'English';
+      
+      // Update direction
+      document.body.style.direction = newLang === 'ar' ? 'rtl' : 'ltr';
+    });
+
+    // Service category tabs functionality
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Hide all service categories
+        document.querySelectorAll('.service-category').forEach(category => {
+          category.style.display = 'none';
+        });
+        
+        // Show selected category
+        const categoryId = this.getAttribute('data-category') + '-category';
+        document.getElementById(categoryId).style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>
